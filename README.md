@@ -11,6 +11,12 @@ gcloud container clusters create us-west1 \
   --zone=us-west-1-a
 ```
 
+Add a config map with the zone information for the cluster:
+
+```
+kubectl create -f configmaps/cluster.yaml
+```
+
 ### Create a Cloud Spanner Instance
 
 ```
