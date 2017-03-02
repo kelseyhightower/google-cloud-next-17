@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: next
+  name: next
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: next
+      name: next
+    spec:
+      containers:
+        - name: next
+          image: gcr.io/hightowerlabs/next:0.0.2
+          imagePullPolicy: Always
+          env:
+            - name: DATABASE_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: spanner
+                  key: database-id
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: cluster
+                  key: region
+          volumeMounts:
+            - name: "service-account"
+              mountPath: "/var/run/secret/cloud.google.com"
+            - name: "certs"
+              mountPath: "/etc/ssl/certs"
+      volumes:
+        - name: "service-account"
+          secret:
+            secretName: "spanner"
+        - name: "certs"
+          hostPath:
+            path: "/etc/ssl/certs"
