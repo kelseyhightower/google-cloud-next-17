@@ -10,6 +10,7 @@ spec:
       port: 80
       protocol: TCP
       targetPort: 8080
+      nodePort: 32000
   selector:
     app: next
   type: LoadBalancer
